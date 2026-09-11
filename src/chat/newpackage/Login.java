@@ -69,9 +69,9 @@ public class Login {
             }     
              return hasCapital & hasNumber & hasSpecialCharacter ;
          }
-     boolean loginSuccess = false;      
+       
     public  boolean loginUser(String strUsername, String strPassword){
-        
+        boolean loginSuccess;  
         if (strUsername == null) {
             loginSuccess = false;
         }else if (registeredUserName.equals(strUsername) && registeredPassword.equals(strPassword)) {
@@ -79,6 +79,7 @@ public class Login {
         }else {
             loginSuccess = false;
         }
+        
         return loginSuccess;
     }
     
@@ -109,7 +110,7 @@ public class Login {
     
     public String returnLoginStatus(boolean success) {
         
-        if (loginSuccess == true) {
+        if (success == true) {
             return "Welcome" + registeredFirstName + "," + registeredLastName + " ,it is great to see you";
         }else {
             return "Username or password is incorrect, please try again";

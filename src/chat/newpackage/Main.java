@@ -77,7 +77,9 @@ public class Main {
           }
          
        }
-            
+       
+            registerMessage = object.registerUser(firstName, lastName, username, password, cellPhoneNumber);
+            System.out.println(registerMessage);
         
             System.out.println();
             System.out.println("=== QuickChat Login ===");
@@ -88,8 +90,8 @@ public class Main {
             System.out.print("Enter your password: ");
             String strPassword = input.nextLine();
 
-            boolean success = object.loginUser(strUsername, strPassword);
-            System.out.println(object.returnLoginStatus(true));
+           boolean success = object.loginUser(strUsername, strPassword);
+           System.out.println(object.returnLoginStatus(success));
         
 
         input.close();                           
