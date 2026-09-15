@@ -111,7 +111,7 @@ public class Login {
     public String returnLoginStatus(boolean success) {
         
         if (success == true) {
-            return "Welcome" + registeredFirstName + "," + registeredLastName + " ,it is great to see you";
+            return "Welcome " + registeredFirstName + ", " + registeredLastName + " it is great to see you again.";
         }else {
             return "Username or password is incorrect, please try again";
         }

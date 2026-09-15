@@ -16,38 +16,37 @@ import static org.junit.Assert.*;
  * @author tshik
  */
 public class LoginTest {
-    
+
     public LoginTest() {
     }
-    
+
     @BeforeClass
     public static void setUpClass() {
     }
-    
+
     @AfterClass
     public static void tearDownClass() {
     }
-    
+
     @Before
     public void setUp() {
     }
-    
+
     @After
     public void tearDown() {
     }
 
     /**
      * Test of checkUserName method, of class Login.
+     * Valid: contains underscore, no more than five characters.
      */
     @Test
     public void testCheckUserName() {
         System.out.println("checkUserName");
-        String username = "Kb_";
-        boolean expResult = false;
-        boolean result = Login.checkUserName(username);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        // Valid case - "kyl_1" has an underscore and is exactly 5 characters
+        assertTrue(Login.checkUserName("kyl_1"));
+        // Invalid case - "kyle!!!!!!" has no underscore and is too long
+        assertFalse(Login.checkUserName("kyle!!!!!!"));
     }
 
     /**
@@ -56,43 +55,24 @@ public class LoginTest {
     @Test
     public void testCheckCellPhoneNumber() {
         System.out.println("checkCellPhoneNumber");
-        String cellPhoneNumber = "";
         Login instance = new Login();
-        boolean expResult = false;
-        boolean result = instance.checkCellPhoneNumber(cellPhoneNumber);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        // Valid case - correct SA international format
+        assertTrue(instance.checkCellPhoneNumber("+27838968976"));
+        // Invalid case - missing international code
+        assertFalse(instance.checkCellPhoneNumber("08966553"));
     }
 
     /**
      * Test of checkPasswordComplexity method, of class Login.
+     * Valid: at least 8 characters, a capital letter, a number, a special character.
      */
     @Test
     public void testCheckPasswordComplexity() {
         System.out.println("checkPasswordComplexity");
-        String password = "";
-        boolean expResult = false;
-        boolean result = Login.checkPasswordComplexity(password);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of loginUser method, of class Login.
-     */
-    @Test
-    public void testLoginUser() {
-        System.out.println("loginUser");
-        String strUsername = "";
-        String strPassword = "";
-        Login instance = new Login();
-        boolean expResult = false;
-        boolean result = instance.loginUser(strUsername, strPassword);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        // Valid case
+        assertTrue(Login.checkPasswordComplexity("Ch&&sec@ke99!"));
+        // Invalid case - no capital, number, or special character
+        assertFalse(Login.checkPasswordComplexity("password"));
     }
 
     /**
@@ -101,32 +81,48 @@ public class LoginTest {
     @Test
     public void testRegisterUser() {
         System.out.println("registerUser");
-        String firstName = "";
-        String lastName = "";
-        String username = "";
-        String password = "";
-        String cellPhoneNumber = "";
         Login instance = new Login();
-        String expResult = "";
-        String result = instance.registerUser(firstName, lastName, username, password, cellPhoneNumber);
+
+        // Valid case - all fields meet the rules
+        String expResult = " The user has been registered successfully";
+        String result = instance.registerUser("Tshifhiwa", "Tshikalange", "tshi_", "Ch&&sec@ke99!", "+27838968976");
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of loginUser method, of class Login.
+     * Must register a user first so registeredUserName/registeredPassword are populated.
+     */
+    @Test
+    public void testLoginUser() {
+        System.out.println("loginUser");
+        Login instance = new Login();
+        instance.registerUser("Tshifhiwa", "Tshikalange", "tshi_", "Ch&&sec@ke99!", "+27838968976");
+
+        // Correct credentials - should succeed
+        assertTrue(instance.loginUser("tshi_", "Ch&&sec@ke99!"));
+
+        // Incorrect credentials - should fail
+        assertFalse(instance.loginUser("tshi_", "wrongPassword1!"));
     }
 
     /**
      * Test of returnLoginStatus method, of class Login.
+     * Must register a user first so the welcome message has a name to use.
      */
     @Test
     public void testReturnLoginStatus() {
         System.out.println("returnLoginStatus");
-        boolean success = false;
         Login instance = new Login();
-        String expResult = "";
-        String result = instance.returnLoginStatus(success);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        instance.registerUser("Tshifhiwa", "Tshikalange", "tshi_", "Ch&&sec@ke99!", "+27838968976");
+
+        // Successful login message
+        String expSuccessResult = "Welcome Tshifhiwa, Tshikalange it is great to see you again.";
+        assertEquals(expSuccessResult, instance.returnLoginStatus(true));
+
+        // Failed login message
+        String expFailResult = "Username or password is incorrect, please try again";
+        assertEquals(expFailResult, instance.returnLoginStatus(false));
     }
-    
+
 }
