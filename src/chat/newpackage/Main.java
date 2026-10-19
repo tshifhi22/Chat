@@ -107,7 +107,7 @@ public class Main {
              System.out.println("How many messages do you want to enter?");
              int totalMessages = Integer.parseInt(input.nextLine()); 
              
-                boolean allEntered = false;
+                
                 int option = 0;
                 
                 while (option !=3){
@@ -119,9 +119,13 @@ public class Main {
                         
                         System.out.println("Please enter your option.");
                         option = Integer.parseInt(input.nextLine());
+                        boolean allEntered = false;
                         
                         if (option == 1) {
+                            System.out.println("You have entered your total messages limit");
+                            
                            if (allEntered ) {
+                               
                                System.out.println("You have entered your total messages limit");              
                               } else {
                                for (int i=0; i<totalMessages; i++) {  

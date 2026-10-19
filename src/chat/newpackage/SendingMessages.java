@@ -14,6 +14,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 
 public class SendingMessages {
@@ -34,7 +36,7 @@ public class SendingMessages {
      
       //Constructor
        public  SendingMessages(String messageID, int messageNumber, String recipient, String message) {
-        this.messageID = messageID;
+        this.messageID = messageID; //fix initialise to generateMessageID()
         this.messageNumber = messageNumber;
         this.recipient = recipient;
         this.message = message;
@@ -113,18 +115,37 @@ public class SendingMessages {
             }
             
                 public String storeMessage() {
-                  storedMessages.add(this);
+    storedMessages.add(this);
+    // Create json file
 
-                  try {
-                      FileWriter writer = new FileWriter(FILE_PATH);
-                      Gson gson = new Gson();
-                      gson.toJson(storedMessages, writer);
-                      writer.close();
-                      return "Message successfully stored";
-                   } catch (IOException e) {
-                      return "Message could not be stored";
-                  }
-                }
+    // This array will hold all the stored messages
+    JSONArray messageArray = new JSONArray();
+
+    // Go through every stored message and turn it into a JSON object
+    for (int i = 0; i < storedMessages.size(); i++) {
+        SendingMessages msg = storedMessages.get(i);
+
+        JSONObject messageObj = new JSONObject();
+        messageObj.put("messageID", msg.messageID);
+        messageObj.put("messageNumber", msg.messageNumber);
+        messageObj.put("recipient", msg.recipient);
+        messageObj.put("message", msg.message);
+        messageObj.put("messageHash", msg.messageHash);
+
+        messageArray.add(messageObj);
+    }
+
+    // Write the array to the json file
+    try {
+        FileWriter writer = new FileWriter(FILE_PATH);
+        writer.write(messageArray.toJSONString());
+        writer.flush();
+        writer.close();
+        return "Message successfully stored";
+    } catch (IOException e) {
+        return "Message could not be stored";
+    }
+}
                 
                 public String getMessageDetails() {
                     return "Message ID: " + messageID + "\n"+ "Message Hash :" + messageHash + "\n" + "Recipient :" + recipient+ "\n" + "Message:" + message;
