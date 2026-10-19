@@ -110,12 +110,13 @@ public class Login {
     
     public String returnLoginStatus(boolean success) {
         
+        // If the login worked, welcome the user by their first and last name
         if (success == true) {
-            return "Welcome to QuikChat";
+            return "Welcome " + registeredFirstName + ", " + registeredLastName + " it is great to see you again.";
         }else {
+            // If the login failed, tell the user to try again
             return "Username or password is incorrect, please try again";
         }
        
     }
 }
-    
