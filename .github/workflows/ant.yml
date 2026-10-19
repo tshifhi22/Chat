@@ -25,13 +25,19 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y ant
 
-      - name: Download JSON Simple
+      - name: Download libraries
         run: |
           mkdir -p libs
           curl -L -o libs/json-simple-1.1.1.jar https://repo1.maven.org/maven2/com/googlecode/json-simple/json-simple/1.1.1/json-simple-1.1.1.jar
+          curl -L -o libs/junit-4.13.2.jar https://repo1.maven.org/maven2/junit/junit/4.13.2/junit-4.13.2.jar
+          curl -L -o libs/hamcrest-core-1.3.jar https://repo1.maven.org/maven2/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar
 
       - name: Build with Ant
-        run: ant -Dlibs.json_simple.classpath=${{ github.workspace }}/libs/json-simple-1.1.1.jar -v
+        run: |
+          ant -v \
+            -Dlibs.json_simple.classpath=${{ github.workspace }}/libs/json-simple-1.1.1.jar \
+            -Dlibs.junit_4.classpath=${{ github.workspace }}/libs/junit-4.13.2.jar \
+            -Dlibs.hamcrest.classpath=${{ github.workspace }}/libs/hamcrest-core-1.3.jar
 
       - name: Upload build files
         if: always()
