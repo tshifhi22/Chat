@@ -25,8 +25,13 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y ant
 
+      - name: Download JSON Simple
+        run: |
+          mkdir -p libs
+          curl -L -o libs/json-simple-1.1.1.jar https://repo1.maven.org/maven2/com/googlecode/json-simple/json-simple/1.1.1/json-simple-1.1.1.jar
+
       - name: Build with Ant
-        run: ant -v
+        run: ant -Dlibs.json_simple.classpath=${{ github.workspace }}/libs/json-simple-1.1.1.jar -v
 
       - name: Upload build files
         if: always()
