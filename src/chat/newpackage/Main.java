@@ -66,17 +66,17 @@ public class Main {
         } 
                  //Request user to enter cell phone number
             while (true) {
-        System.out.print("Please enter your cellphone number");
-        cellPhoneNumber= input.nextLine().trim();
-       
-        if (object.checkCellPhoneNumber(cellPhoneNumber)) {
-            System.out.println(" CellPhone has been successfully added.");
-            break;
-        } else {
-            System.out.println(" CellPhone number incorrectly added or does not contain international .");
-          }
-         
-       }
+            System.out.print("Please enter your cellphone number");
+            cellPhoneNumber= input.nextLine().trim();
+
+            if (object.checkCellPhoneNumber(cellPhoneNumber)) {
+                System.out.println(" CellPhone has been successfully added.");
+                break;
+            } else {
+                System.out.println(" CellPhone number incorrectly added or does not contain international .");
+              }
+
+              }
        
             registerMessage = object.registerUser(firstName, lastName, username, password, cellPhoneNumber);
             System.out.println(registerMessage);
@@ -93,8 +93,98 @@ public class Main {
            boolean success = object.loginUser(strUsername, strPassword);
            System.out.println(object.returnLoginStatus(success));
         
-
+             if (!success) {
+           
+             System.out.println("The login was unsuccessfull, please log in the system.");
+             input.close();
+             return; 
+             }
+           
+             //Welcome to QuickChat message
+             System.out.println("Welcome to QuickChat.");
+             
+             //Ask user how many messages they want to enter
+             System.out.println("How many messages do you want to enter?");
+             int totalMessages = Integer.parseInt(input.nextLine()); 
+             
+                
+                int option = 0;
+                
+                while (option !=3){
+                        System.out.println("Menu");
+                        System.out.println("Choose an option below:");
+                        System.out.println("1. Send Messages");
+                        System.out.println("2. Show recently sent messages");
+                        System.out.println("3. Quit");
+                        
+                        System.out.println("Please enter your option.");
+                        option = Integer.parseInt(input.nextLine());
+                        boolean allEntered = false;
+                        
+                        if (option == 1) {
+                            System.out.println("You have entered your total messages limit");
+                            
+                           if (allEntered ) {
+                               
+                               System.out.println("You have entered your total messages limit");              
+                              } else {
+                               for (int i=0; i<totalMessages; i++) {  
+                                   System.out.println("\nMessage" + (i + 1) + ":");
+                                   System.out.println("Enter Recipient (+27.....) : ");
+                                   String recipient = input.nextLine();
+                                   System.out.print(" Enter messages that are not more than 250 characters");
+                                   String message = input.nextLine();
+                                                                                                          
+                                                              
+                                SendingMessages msg = new SendingMessages(SendingMessages.generateMessageID(), i, recipient, message);
+                                
+                               System.out.println( msg.checkRecipientCell());
+                                if (!msg.checkRecipientCell().contains("successfully captured")){
+                                    i--;
+                                    continue;
+                                }
+                                
+                                //Checking the length of the message
+                                System.out.println(msg.checkMessage());
+                                if (msg.checkMessage().contains("Please enter ")) {
+                                    i--;
+                                    continue;
+                                }
+                                
+                                //Display message ID and Hash
+                                System.out.println(msg.displayMessage());
+                                System.out.println("Message Hash: " + msg.createMessageHash());
+                                
+                                //Prompting the user on what they want to do
+                                System.out.println("Choose and option: 1.Send 2.Disregard  3. Store");
+                                int choice = Integer.parseInt(input.nextLine());
+                                System.out.println(msg.SentMessage(option));
+                               
+                                if (option == 1){
+                                    System.out.println("-----Full Message-----");
+                                    System.out.println(msg.getMessageDetails());
+                                 }
+                               }
+                                allEntered = true;
+                                
+                                // Show total number of messages sent
+                                System.out.println("\nTotal messages sent: " + SendingMessages.returnTotalMessages());
+                                
+                                }                 
+                              } else if 
+                                (option ==2) {
+                                System.out.println("Coming Soon");
+                                
+                                } else if (option ==3){
+                                System.out.println("Thank you, goodbye.");
+                                }
+                                else {
+                                System.out.println("Invalid option");
+                              }
+                         
+                     }
+             
         input.close();                           
     }
     
-}
+  }
