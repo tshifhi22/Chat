@@ -44,7 +44,7 @@ public class SendingMessages {
         
        }
        //Random 10 digits created     
-      public static String generateMessageID() {
+         public static String generateMessageID() {
           Random random = new Random();
           String ID = "" ;
           

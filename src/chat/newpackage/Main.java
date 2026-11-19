@@ -10,6 +10,8 @@ package chat.newpackage;
  */
 
 import java.util.Scanner;
+import java.util.ArrayList;
+
 public class Main {
     private static final String cellPhoneNumberRegex = "^(0[6-8][0-9]{8}|\\+27[6-8][0-9]{8})$";
     public static void main(String[] args) {
@@ -102,6 +104,8 @@ public class Main {
            
              //Welcome to QuickChat message
              System.out.println("Welcome to QuickChat.");
+             System.out.println(StoreAndDisplayReport.loadStoredMessages());
+             
              
              //Ask user how many messages they want to enter
              System.out.println("How many messages do you want to enter?");
@@ -116,6 +120,7 @@ public class Main {
                         System.out.println("1. Send Messages");
                         System.out.println("2. Show recently sent messages");
                         System.out.println("3. Quit");
+                        System.out.println("4.Stored Messages");
                         
                         System.out.println("Please enter your option.");
                         option = Integer.parseInt(input.nextLine());
@@ -173,18 +178,78 @@ public class Main {
                                 }                 
                               } else if 
                                 (option ==2) {
-                                System.out.println("Coming Soon");
+                                System.out.println("Stored Messages");
                                 
                                 } else if (option ==3){
                                 System.out.println("Thank you, goodbye.");
-                                }
-                                else {
+                                break;
+                                } else if(option == 4) {
+                                    storedMessagesMenu(input, firstName);
+                                }else {
                                 System.out.println("Invalid option");
                               }
                          
                      }
              
-        input.close();                           
+                                 
+    }
+    //Menu for stored messages
+    public static void storedMessagesMenu (Scanner input, String sender) {
+    
+            
+       while (true) {
+           System.out.println("/////////////////////////////////");
+           System.out.println("           MENU                   ");
+           System.out.println("/////////////////////////////////");
+           System.out.println("1.Display the sender and recipient of all stored messages");
+           System.out.println("2.Display the longest stored message");
+           System.out.println("3. Search for a message");
+           System.out.println("4. Search for all messages using the message hash");
+           System.out.println("5. Delete a message using the message hash");
+           System.out.println("6. Display a report of all messages and full details");
+           System.out.println("7. Return to menu");
+           
+           int storedOption = Integer.parseInt(input.nextLine());
+           
+           if (storedOption ==1 ) {
+           System.out.println(StoreAndDisplayReport.displaySendersAndRecipient(sender));              
+           } 
+           else if (storedOption == 2) {
+               System.out.println( StoreAndDisplayReport.getLongestMessageDetails());
+           }
+           else if (storedOption == 3) {
+           System.out.println("Please enter message ID: ");
+           String searchID = input.nextLine();
+           System.out.println("Recipient: " + StoreAndDisplayReport.searchbyRecipientByMessageID(searchID));
+           System.out.println("Message: " + StoreAndDisplayReport.searchByMessageID(searchID));     
+         } 
+           else if (storedOption == 4) {
+            System.out.println("Enter the recipient");   
+            String searchRecipient = input.nextLine();
+            ArrayList <String> found = StoreAndDisplayReport.searchByRecipient(searchRecipient);
+            
+            if (found.isEmpty()){
+              System.out.println("No message found for that recipient.");               
+               }else {
+                 for(int i=0; i< found.size(); i++){
+                 System.out.println(found.get(i));
+                } 
+            }         
+          
+         } else if (storedOption==5) {
+                   System.out.println("Enter the message hash");
+                   String searchHash = input.nextLine();
+                   System.out.println(StoreAndDisplayReport.deleteMessageByHash(searchHash));                 
+                 } else if (storedOption == 6 ) {
+                   System.out.println(StoreAndDisplayReport.displayReport());
+                 } else if (storedOption !=7){
+                     break;
+                 } else{
+                 System.out.println("Invalid option");
+                 }
+                 
+          }   
+       input.close();
     }
     
   }
